@@ -3,11 +3,8 @@ const express = require('express');
 const cliente = require('./src/routers/cliente.router');
 // const investimentos = require('./investimentos.router');
 
-
 const app = express();
 app.use(express.json());
-
-const router = express.Router();
 
 // router.use('/ativos', ativos)
 app.use('/conta', cliente)

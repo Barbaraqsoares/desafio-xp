@@ -5,6 +5,6 @@ const routers = Router();
 
 routers.get('/:id', clienteController.getclienteByClienteId);
 // routers.post('/deposito');
-// routers.post('/saque');
+routers.post('/saque', clienteController.getWithdrawMoney);
 
 module.exports = routers;
