@@ -1,29 +1,28 @@
 const CarteiraSchema = (sequelize, DataTypes) => {
   const CarteiraModel = sequelize.define("Carteira", {
-    idCliente: {
+    qntAcao: {
       type: DataTypes.INTEGER,
-      primaryKey: true
     },
-    idAcao: {
-      type: DataTypes.INTEGER,
-      primaryKey: true
-    },
-    qntAcao: DataTypes.DECIMAL,
+  },  
+  {
+    timestamps: false,
   });
 
   CarteiraModel.associate = (models) => {
-    CarteiraModel.belongsTo(models.Cliente, {
-      through: CarteiraModel,
-      foreignKey: "idCliente",
-      as: "Cliente"
-    })
+   models.Acao.belongsToMany(models.Cliente, {
+     as: "Clientes",
+     through: CarteiraModel,
+     foreignKey: 'idAcao',
+     otherKey: 'idCliente'
+   })
   }
 
   CarteiraModel.associate = (models) => {
-    CarteiraModel.belongsTo(models.Acao, {
+    models.Cliente.belongsToMany(models.Acao, {
+      as: "Acoes",
       through: CarteiraModel,
-      foreignKey: "idAcao",
-      as: "Acao"
+      foreignKey: "idCliente",
+      otherKey: 'idAcao'
     })
   }
 

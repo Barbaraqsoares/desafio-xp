@@ -1,13 +1,17 @@
 const express = require('express');
-const { Cliente, Carteira, Acoes } = require('./models');
+// const ativos = require('./ativos.router');
+const cliente = require('./src/routers/cliente.router');
+// const investimentos = require('./investimentos.router');
+
 
 const app = express();
 app.use(express.json());
 
-app.get('/', async (req, res) => {
-  const clientes = await Cliente.findAll();
-  return res.status(201).json(clientes);
-}),
+const router = express.Router();
+
+// router.use('/ativos', ativos)
+app.use('/conta', cliente)
+// router.use('/investimentos', investimentos)
 
 
 module.exports = app;
