@@ -17,7 +17,6 @@ const AcaoSchema = (sequelize, DataTypes) => {
   AcaoModel.associate = (models) => {
     AcaoModel.hasMany(models.Carteira, {
       foreignKey: "idAcao",
-      as: "Acoes"
     })
   }
 

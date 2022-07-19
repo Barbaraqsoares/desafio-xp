@@ -21,12 +21,25 @@ const getWithdrawMoney = async (codCliente, valor) => {
     return { status: 404, message: "Insufficient founds"}
   }
 
-  const updateValue = await Cliente.update({ where: { id: codCliente }})
+  const updateSaldo = balance.dataValues.saldo - valor;
+
+  await Cliente.update({ saldo: updateSaldo}, { where: { id: codCliente }})
   
-  return valor;
+  return updateSaldo;
+}
+
+const getDeposit = async (codCliente, valor) => {
+  const balance = await custumerBalance(codCliente);
+  
+  const updateSaldo = balance.dataValues.saldo + valor;
+
+  await Cliente.update({ saldo: updateSaldo}, { where: { id: codCliente }})
+  
+  return updateSaldo;
 }
 
 module.exports = {
   getclienteByClienteId,
   getWithdrawMoney,
+  getDeposit,
 }

@@ -1,8 +1,9 @@
-import { Router } from 'express';
+const { Router } = require('express');
+const ativosController = require('../controller/ativos.controller');
+
 
 const routers = Router();
 
-routers.get('/:codCliente');
-routers.get('/:codAtivo');
+routers.get('/:codAtivo', ativosController.getAllActions);
 
-export default routers;
+module.exports = routers;

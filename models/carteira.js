@@ -9,21 +9,14 @@ const CarteiraSchema = (sequelize, DataTypes) => {
   });
 
   CarteiraModel.associate = (models) => {
-   models.Acao.belongsToMany(models.Cliente, {
+    CarteiraModel.belongsTo(models.Cliente, {
      as: "Clientes",
-     through: CarteiraModel,
-     foreignKey: 'idAcao',
-     otherKey: 'idCliente'
-   })
-  }
-
-  CarteiraModel.associate = (models) => {
-    models.Cliente.belongsToMany(models.Acao, {
-      as: "Acoes",
-      through: CarteiraModel,
-      foreignKey: "idCliente",
-      otherKey: 'idAcao'
-    })
+     foreignKey: "idCliente"
+   });
+   CarteiraModel.belongsTo(models.Acao, {
+    as: "Acoes",
+    foreignKey: 'idAcao'
+  })
   }
 
   return CarteiraModel;
