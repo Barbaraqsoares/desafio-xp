@@ -1,8 +1,9 @@
-import { Router } from 'express';
+const { Router } = require('express');
+const investimentoController = require('../controller/investimentos.controller');
 
 const routers = Router();
 
-routers.post('/comprar');
-routers.post('/vender')
+routers.post('/comprar', investimentoController.getBuyShares);
+routers.post('/vender', investimentoController.getSellShares)
 
-export default routers;
+module.exports = routers;

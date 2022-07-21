@@ -1,8 +1,7 @@
 const { Router } = require('express');
 const clienteController = require('../controller/cliente.controller');
 const ativosController = require('../controller/ativos.controller')
-const saqueValidate = require('../middlewares/saqueValidate');
-const depositoValidate = require('../middlewares/depositoValidate');
+const { saqueValidate, depositoValidate } = require('../middlewares');
 
 const routers = Router();
 

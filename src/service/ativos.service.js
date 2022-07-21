@@ -18,7 +18,7 @@ const getAllActionsByClient = async (codCliente) => {
     attributes: { exclude: 'id' },
     raw: true,
   });
-  console.log('aqui =====>', actionsByClient);
+  
   return actionsByClient;
 }
 
