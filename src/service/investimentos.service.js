@@ -33,28 +33,31 @@ const getBuyShares = async (codCliente, codAtivo, qtdeAtivo) => {
   const { qntAcao, valorAcao } = acao.dataValues;
 
   if (qntAcao < qtdeAtivo) {
-    return { status: 400, message: 'Quantidade inexistente!'};
+    throw { status: 400, message: 'Quantidade inexistente!'};
   }
   
   const purchaseValue = valorAcao * qtdeAtivo;
 
   if (purchaseValue >= saldo) {
-    return { status: 400, message: 'Saldo insuficiente!'};
+    throw { status: 400, message: 'Saldo insuficiente!'};
   }
 
   const newBalance = saldo - purchaseValue;
   const newAmountOfAction = qntAcao - qtdeAtivo;
-
+  
   await sequelize.transaction(async (transaction) => {
     await Cliente.update({ saldo: newBalance }, { where: { id: codCliente }}, { transaction });
     
-    const thereIsAction = await infoCarteira(codCliente, codAtivo);
-    
+    const thereIsAction = await Carteira.findOne({
+      where: { idCliente: codCliente, idAcao: codAtivo },
+      attributes: { exclude: ['id', 'idAcao', 'idCliente']}
+    });
     if (!thereIsAction) {
       await Carteira.create({ idCliente: id, idAcao: codAtivo, qntAcao: qtdeAtivo }, { transaction });
     } else {
-        const { qntAcao: qntAcaoCliente } = thereIsAction.dataValues;
-        const amountOfCustomerAction =  qntAcaoCliente + qtdeAtivo;
+      const { qntAcao: qntAcaoCliente } = thereIsAction.dataValues;
+      const amountOfCustomerAction =  qntAcaoCliente + qtdeAtivo;
+      console.log('thereIs =====>', amountOfCustomerAction);
         await Carteira.update({ qntAcao: amountOfCustomerAction }, { where: { idCliente: codCliente, idAcao: codAtivo }});
         await Acao.update({ qntAcao: newAmountOfAction }, { where: { id: codAtivo }});
     }
@@ -70,14 +73,13 @@ const getSellShares = async (codCliente, codAtivo, qtdeAtivo) => {
   const { saldo } = saldoCliente.dataValues;
   const { qntAcao, valorAcao } = acao.dataValues;
 
-  const thereIsActionPortifolio = infoCarteira(codCliente, codAtivo);
-
-  if (!thereIsActionPortifolio) {
-    return { status: 400, message: 'Ação inexistente'};
-  }
+  const thereIsActionPortifolio = await infoCarteira(codCliente, codAtivo);
+  
+  const { qntAcao: qntAcaoCliente } = thereIsActionPortifolio;
+ 
   
   if (qntAcaoCliente < qtdeAtivo) {
-    return { status: 400, message: 'Quantidade inexistente!'};
+    throw { status: 400, message: 'Quantidade inexistente!'};
   }
   
   const saleValue = valorAcao * qtdeAtivo;
@@ -94,8 +96,13 @@ const getSellShares = async (codCliente, codAtivo, qtdeAtivo) => {
     await Carteira.update({ qntAcao: newActionsBalance }, { where: { idCliente: codCliente, idAcao: codAtivo }}, { transaction });
 
     await Acao.update({ qntAcao: newAmountOfAction }, { where: { id: codAtivo }});
-  });
 
+    const verificaQntAcao = await Carteira.findOne({ where: { idAcao: codAtivo, idCliente: codCliente  } });
+
+    if (verificaQntAcao.qntAcao === 0) {
+      await Carteira.destroy({ where: { id: verificaQntAcao.id }})
+    }
+  });
   return { status: 201, message: 'Successful purchase!'}
 }
 
