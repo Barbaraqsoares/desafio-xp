@@ -21,13 +21,8 @@ const infoCarteira = async (codCliente, codAtivo) => {
     where: { idCliente: codCliente, idAcao: codAtivo },
     attributes: { exclude: ['id']}
   });
-
-  if (!carteiraDeAcoes) {
-    return { status: 400, message: 'Você não possui essa ação!'};
-  }
-
-  const data = carteiraDeAcoes.dataValues;
-  return data;
+  const actionsPortifolio = carteiraDeAcoes.dataValues;
+  return actionsPortifolio;
 }
 
 const getBuyShares = async (codCliente, codAtivo, qtdeAtivo) => {
@@ -53,7 +48,7 @@ const getBuyShares = async (codCliente, codAtivo, qtdeAtivo) => {
   await sequelize.transaction(async (transaction) => {
     await Cliente.update({ saldo: newBalance }, { where: { id: codCliente }}, { transaction });
     
-    const thereIsAction = await Carteira.findOne({ where: { idCliente: codCliente, idAcao: codAtivo }});
+    const thereIsAction = await infoCarteira(codCliente, codAtivo);
     
     if (!thereIsAction) {
       await Carteira.create({ idCliente: id, idAcao: codAtivo, qntAcao: qtdeAtivo }, { transaction });
@@ -71,25 +66,30 @@ const getBuyShares = async (codCliente, codAtivo, qtdeAtivo) => {
 const getSellShares = async (codCliente, codAtivo, qtdeAtivo) => {
   const acao = await infoAction(codAtivo);
   const saldoCliente = await infoCliente(codCliente);
-  const carteiraDeAcoes = await infoCarteira(codCliente, codAtivo);
   
-  const { id, saldo } = saldoCliente.dataValues;
+  const { saldo } = saldoCliente.dataValues;
   const { qntAcao, valorAcao } = acao.dataValues;
+
+  const thereIsActionPortifolio = infoCarteira(codCliente, codAtivo);
+
+  if (!thereIsActionPortifolio) {
+    return { status: 400, message: 'Ação inexistente'};
+  }
   
   if (qntAcaoCliente < qtdeAtivo) {
     return { status: 400, message: 'Quantidade inexistente!'};
   }
   
-  const purchaseValue = valorAcao * qtdeAtivo;
+  const saleValue = valorAcao * qtdeAtivo;
 
-  const newBalance = saldo + purchaseValue;
+  const updateBalance = saldo + saleValue;
 
   const newAmountOfAction = qntAcao + qtdeAtivo;
 
   const newActionsBalance = qntAcaoCliente - qtdeAtivo;
 
   await sequelize.transaction(async (transaction) => {
-    await Cliente.update({ saldo: newBalance }, { where: { id: codCliente }}, { transaction });
+    await Cliente.update({ saldo: updateBalance }, { where: { id: codCliente }}, { transaction });
 
     await Carteira.update({ qntAcao: newActionsBalance }, { where: { idCliente: codCliente, idAcao: codAtivo }}, { transaction });
 

@@ -1,9 +1,9 @@
 const { Router } = require('express');
-const investimentoController = require('../controller/investimentos.controller');
+const investimentosController = require('../controller/investimentos.controller');
 
 const routers = Router();
 
-routers.post('/comprar', investimentoController.getBuyShares);
-routers.post('/vender', investimentoController.getSellShares)
+routers.post('/comprar', investimentosController.getBuyShares);
+routers.post('/vender', investimentosController.getSellShares)
 
 module.exports = routers;
