@@ -1,4 +1,27 @@
 const { Cliente } = require('../../models');
+const { generateJWTToken } = require('../utils/JWTToken');
+
+const loginClient = async (email) => {
+  const user = await Cliente.findOne({ where: { email } });
+  if (!user) {
+    throw { status: 400, message: 'Invalid fields' };
+  }
+  return user;
+};
+
+const createClient = async (nomeCliente, email, senha, saldo) => {
+  const hasUser = await Cliente.findOne({ where: { email } });
+  
+  if (hasUser) {
+    throw { status: 409, message: 'Usuário já cadastrado!' };
+  }
+
+  await Cliente.create({ nomeCliente, email, senha, saldo });
+  
+  const token = generateJWTToken(email);
+
+  return token;
+};
 
 const custumerBalance = async (codCliente) => {
   const cliente = await Cliente.findOne({ where: { id: codCliente }, attributes: { exclude: ['nomeCliente', 'email', 'senha']}});
@@ -39,6 +62,8 @@ const getDeposit = async (codCliente, valor) => {
 }
 
 module.exports = {
+  loginClient,
+  createClient,
   getclienteByClienteId,
   getWithdrawMoney,
   getDeposit,

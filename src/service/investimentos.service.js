@@ -38,7 +38,7 @@ const getBuyShares = async (codCliente, codAtivo, qtdeAtivo) => {
   
   const purchaseValue = valorAcao * qtdeAtivo;
 
-  if (purchaseValue >= saldo) {
+  if (purchaseValue > saldo) {
     throw { status: 400, message: 'Saldo insuficiente!'};
   }
 
@@ -54,12 +54,15 @@ const getBuyShares = async (codCliente, codAtivo, qtdeAtivo) => {
     });
     if (!thereIsAction) {
       await Carteira.create({ idCliente: id, idAcao: codAtivo, qntAcao: qtdeAtivo }, { transaction });
+
+      await Acao.update({ qntAcao: newAmountOfAction }, { where: { id: codAtivo }});
     } else {
       const { qntAcao: qntAcaoCliente } = thereIsAction.dataValues;
       const amountOfCustomerAction =  qntAcaoCliente + qtdeAtivo;
-      console.log('thereIs =====>', amountOfCustomerAction);
-        await Carteira.update({ qntAcao: amountOfCustomerAction }, { where: { idCliente: codCliente, idAcao: codAtivo }});
-        await Acao.update({ qntAcao: newAmountOfAction }, { where: { id: codAtivo }});
+      
+      await Carteira.update({ qntAcao: amountOfCustomerAction }, { where: { idCliente: codCliente, idAcao: codAtivo }});
+
+      await Acao.update({ qntAcao: newAmountOfAction }, { where: { id: codAtivo }});
     }
   });
 

@@ -1,4 +1,33 @@
 const clienteService = require('../service/cliente.service');
+const { generateJWTToken } = require('../utils/JWTToken');
+
+const loginClient = async (req, res, _next) => {
+  const { email } = req.body;
+
+  const user = await clienteService.loginClient(email);
+  
+  if (user.message) {
+    throw { status: 400, message: user.message };
+  }
+  
+  const token = generateJWTToken(email);
+  
+  return res.status(200).json({ token });
+};
+
+const createClient = async (req, res, _next) => {
+  const { nomeCliente, email, senha, saldo } = req.body;
+  
+  const user = await clienteService.createClient(nomeCliente, email, senha, saldo);
+  
+  if (user.message) {
+    throw { status: user.status, message: user.message };
+  }
+  
+  const token = generateJWTToken(email);
+  
+  return res.status(201).json({ token });
+};
 
 const getclienteByClienteId = async (req, res, _next) => {
   const { id } =  req.params;
@@ -32,6 +61,8 @@ const getDeposit = async (req, res, _next) => {
 }
 
 module.exports = {
+  loginClient,
+  createClient,
   getclienteByClienteId,
   getWithdrawMoney,
   getDeposit,

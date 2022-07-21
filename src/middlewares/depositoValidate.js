@@ -6,15 +6,15 @@ const schema = Joi.object({
   valor: Joi.number().greater(0).required(),
 });
 
-const depositoValidate = (req, res, next) => {
+const depositoValidate = (req, _res, next) => {
   const { error } = schema.validate(req.body);
   
   if (!error) return next();
   
   if (error.message.includes('required')) {
-    return res.status(400).json({ message: error.message });
+   throw { status: 400, message: error.message};
   } 
-  return res.status(422).json({ message: error.message });
+  throw { status: 422, message: error.message};
 };
 
 module.exports = depositoValidate;

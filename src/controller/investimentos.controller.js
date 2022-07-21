@@ -15,7 +15,7 @@ const getSellShares = async (req, res, _next) => {
   const { codCliente, codAtivo, qtdeAtivo } = req.body;
 
   const sell = await investomentoService.getSellShares(codCliente, codAtivo, qtdeAtivo);
-  console.log('aqui sell =====>', sell);
+  
   if (sell.status === 400) {
     return res.status(sell.status).json(sell);
   }

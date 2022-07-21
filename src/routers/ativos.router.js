@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const ativosController = require('../controller/ativos.controller');
-
+// const validateToken = require('../middlewares/validateToken');
 
 const routers = Router();
 

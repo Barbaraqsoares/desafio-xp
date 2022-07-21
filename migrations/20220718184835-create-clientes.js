@@ -10,15 +10,19 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       nomeCliente: {
+        allowNull: false,
         type: Sequelize.STRING(50),
       },
       email: {
+        allowNull: false,
         type: Sequelize.STRING(150),
       },
       senha: {
+        allowNull: false,
         type: Sequelize.STRING(50),
       },
       saldo: {
+        allowNull: true,
         type: Sequelize.FLOAT,
       },
       createdAt: {
