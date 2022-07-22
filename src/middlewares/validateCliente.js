@@ -20,11 +20,9 @@ const clientSchema = Joi.object({
 
 const validateClient = (req, res, next) => {
   const { error } = clientSchema.validate(req.body);
-  console.log("ErROR ====>>", error);
+ 
   if (error) {
     const [code, message] = error.message.split('|');
-    console.log("ErROR CODE====>>", code);
-    console.log("ErROR MESSAGE ====>>", message);
     throw { status: code, message: message };
   }
   next();

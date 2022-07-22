@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dçijbasfduihsdf';
 const jwtConfig = {
-  expiresIn: '120m',
+  expiresIn: '15m',
   algorithm: 'HS256',
 };
 
@@ -10,15 +10,13 @@ const generateJWTToken = (payload) => jwt.sign({ payload }, JWT_SECRET, jwtConfi
 
 const authenticateToken = (token) => {
   if (!token) {
-    const newError = { status: 401, message: 'Token not found' };
-    throw newError;
+    throw { status: 401, message: 'Token not found' };
   }
   try {
     const instrospection = jwt.verify(token, JWT_SECRET, jwtConfig);
     return instrospection;
   } catch (e) {
-    const newError = { status: 401, message: 'Expired or invalid token' };
-    throw newError;
+    throw { status: 401, message: 'Expired or invalid token' };
   }
 };
 

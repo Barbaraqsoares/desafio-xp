@@ -52,10 +52,12 @@ const getBuyShares = async (codCliente, codAtivo, qtdeAtivo) => {
       where: { idCliente: codCliente, idAcao: codAtivo },
       attributes: { exclude: ['id', 'idAcao', 'idCliente']}
     });
+
     if (!thereIsAction) {
       await Carteira.create({ idCliente: id, idAcao: codAtivo, qntAcao: qtdeAtivo }, { transaction });
 
       await Acao.update({ qntAcao: newAmountOfAction }, { where: { id: codAtivo }});
+
     } else {
       const { qntAcao: qntAcaoCliente } = thereIsAction.dataValues;
       const amountOfCustomerAction =  qntAcaoCliente + qtdeAtivo;
@@ -106,6 +108,7 @@ const getSellShares = async (codCliente, codAtivo, qtdeAtivo) => {
       await Carteira.destroy({ where: { id: verificaQntAcao.id }})
     }
   });
+  
   return { status: 201, message: 'Successful purchase!'}
 }
 

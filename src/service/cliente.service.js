@@ -28,11 +28,11 @@ const custumerBalance = async (codCliente) => {
 
   return cliente;
 }
-const getclienteByClienteId = async (id) => {
+const getBalanceByClienteId = async (id) => {
   const cliente = await custumerBalance(id);
 
   if (!cliente) {
-    return { status: 400, message: 'Invalid fields' };
+    throw { status: 400, message: 'Invalid fields' };
   }
   return cliente;
 }
@@ -41,7 +41,7 @@ const getWithdrawMoney = async (codCliente, valor) => {
   const balance = await custumerBalance(codCliente);
 
   if (valor > balance.dataValues.saldo) {
-    return { status: 404, message: "Insufficient founds"}
+    throw { status: 404, message: "Insufficient founds"}
   }
 
   const updateSaldo = balance.dataValues.saldo - valor;
@@ -64,7 +64,7 @@ const getDeposit = async (codCliente, valor) => {
 module.exports = {
   loginClient,
   createClient,
-  getclienteByClienteId,
+  getBalanceByClienteId,
   getWithdrawMoney,
   getDeposit,
 }

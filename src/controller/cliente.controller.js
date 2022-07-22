@@ -29,13 +29,13 @@ const createClient = async (req, res, _next) => {
   return res.status(201).json({ token });
 };
 
-const getclienteByClienteId = async (req, res, _next) => {
+const getBalanceByClienteId = async (req, res, _next) => {
   const { id } =  req.params;
 
-  const cliente = await clienteService.getclienteByClienteId(id);
+  const cliente = await clienteService.getBalanceByClienteId(id);
 
   if (cliente.message) {
-    return res.status(cliente.status).json(cliente);
+    throw { status: cliente.status, message: cliente.message };
   }
   return res.status(201).json(cliente);
 }
@@ -44,10 +44,6 @@ const getWithdrawMoney = async (req, res, _next) => {
   const { codCliente, valor } = req.body;
 
   const withdraw = await clienteService.getWithdrawMoney(codCliente, valor);
-
-  if (withdraw.message) {
-    return res.status(withdraw.status).json(withdraw);
-  }
 
   return res.status(201).json({ message: `Saque realizado com sucesso. Seu novo saldo é: ${ withdraw }` });
 }
@@ -63,7 +59,7 @@ const getDeposit = async (req, res, _next) => {
 module.exports = {
   loginClient,
   createClient,
-  getclienteByClienteId,
+  getBalanceByClienteId,
   getWithdrawMoney,
   getDeposit,
 }

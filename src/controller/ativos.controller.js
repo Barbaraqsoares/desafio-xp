@@ -1,6 +1,6 @@
 const ativosService = require('../service/ativos.service');
 
-const getAllActions = async (req, res, _next) => {
+const getAction = async (req, res, _next) => {
   const { codAtivo } =  req.params;
 
   const acao = await ativosService.getAllActions(codAtivo);
@@ -10,13 +10,20 @@ const getAllActions = async (req, res, _next) => {
 
 const getAllActionsByClient = async (req, res, _next) => {
   const { codCliente } = req.params;
+  const { page } = req.query;
 
-  const actionsByClient = await ativosService.getAllActionsByClient(codCliente);
+  const actionsByClient = await ativosService.getAllActionsByClient(codCliente, page);
 
   return res.status(201).json(actionsByClient);
 }
 
+const getAllActions = async (req, res, next) => {
+  const acoes = await ativosService.getAllActions(req.query.page);
+  return res.status(201).json(acoes)
+}
+
 module.exports  = {
-  getAllActions,
+  getAction,
   getAllActionsByClient,
+  getAllActions,
 };

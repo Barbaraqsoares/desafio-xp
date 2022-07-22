@@ -1,6 +1,7 @@
+const sequelize = require('sequelize');
 const { Acao, Carteira } = require('../../models');
 
-const getAllActions = async (codAtivo) => {
+const getAction = async (codAtivo) => {
   const acao = await Acao.findOne({ where: { id: codAtivo }});
 
   if (acao === null) {
@@ -10,7 +11,8 @@ const getAllActions = async (codAtivo) => {
   return acao;
 }
 
-const getAllActionsByClient = async (codCliente) => {
+const getAllActionsByClient = async (codCliente, page = 0) => {
+  const itemsPerPage = 20;
   const actionsByClient = await Carteira.findAll({
     where: { idCliente: codCliente }, 
     include: [{ 
@@ -21,6 +23,8 @@ const getAllActionsByClient = async (codCliente) => {
     }],
     attributes: { exclude: 'id' },
     raw: true,
+    limit: itemsPerPage,
+    offset: itemsPerPage * page,
   });
 
   if (actionsByClient.length === 0) {
@@ -30,7 +34,26 @@ const getAllActionsByClient = async (codCliente) => {
   return actionsByClient;
 }
 
+const getAllActions = async (page = 0) => {
+  const itemsPerPage = 20;
+  const numberOfSharesInvested = await Acao.findAll({
+  include: [{
+    model: Carteira,
+    as: 'Carteiras',
+    attributes: [],
+  }],
+  attributes: { include: [[sequelize.fn('sum', sequelize.col('Carteiras.qntAcao')), 'qntAcaoInvestida']] },
+  group: ['id'],
+  raw: false,
+  limit: itemsPerPage,
+  subQuery: false,
+  offset: itemsPerPage * page,
+  });
+  return numberOfSharesInvested;
+}
+
 module.exports  = {
-  getAllActions,
+  getAction,
   getAllActionsByClient,
+  getAllActions,
 };

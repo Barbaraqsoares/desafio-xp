@@ -8,7 +8,7 @@ const depositoValidate = require('../middlewares/depositoValidate');
 
 const routers = Router();
 
-routers.get('/:id', validateToken, clienteController.getclienteByClienteId);
+routers.get('/:id', validateToken, clienteController.getBalanceByClienteId);
 routers.get('/ativos/:codCliente', validateToken, ativosController.getAllActionsByClient);
 routers.post('/', validateClient, clienteController.createClient);
 routers.post('/deposito', validateToken, depositoValidate, clienteController.getDeposit);
