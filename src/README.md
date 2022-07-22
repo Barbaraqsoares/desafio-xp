@@ -22,9 +22,17 @@ Esse projeto foi desenvolvido em JavaScript, utilizando Node.js, com o framework
 
 ### 🔎 Orientações
 
-  Para esse projeto é necessário instalar as dependências com:
+1. Clone o repositório:
 
- >  `npm install`
+- `git clone https://git@github.com:Barbaraqsoares/desafio-xp.git`
+
+- Entre na pasta do repositório:
+  - `cd desafio-xp`
+  
+
+2. Instale as dependências com:
+
+  -  `npm install`
 
 <details>
 <summary><strong>🍀 Maiores Desafios:</strong></summary><br />

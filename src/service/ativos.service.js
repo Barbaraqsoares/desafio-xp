@@ -5,7 +5,7 @@ const getAction = async (codAtivo) => {
   const acao = await Acao.findOne({ where: { id: codAtivo }});
 
   if (acao === null) {
-    throw { status: 400, message: "Não possui este ativo!"}
+    throw { status: 404, message: "Não possui este ativo!"}
   };
   
   return acao;
@@ -28,7 +28,7 @@ const getAllActionsByClient = async (codCliente, page = 0) => {
   });
 
   if (actionsByClient.length === 0) {
-    throw { status: 400, message: "Este cliente não possui ações!"}
+    throw { status: 404, message: "Este cliente não possui ações!"}
   };
   
   return actionsByClient;

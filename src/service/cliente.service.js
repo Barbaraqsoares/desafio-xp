@@ -4,7 +4,7 @@ const { generateJWTToken } = require('../utils/JWTToken');
 const loginClient = async (email) => {
   const user = await Cliente.findOne({ where: { email } });
   if (!user) {
-    throw { status: 400, message: 'Invalid fields' };
+    throw { status: 422, message: 'Invalid fields' };
   }
   return user;
 };
@@ -13,7 +13,7 @@ const createClient = async (nomeCliente, email, senha, saldo) => {
   const hasUser = await Cliente.findOne({ where: { email } });
   
   if (hasUser) {
-    throw { status: 409, message: 'Usuário já cadastrado!' };
+    throw { status: 422, message: 'Usuário já cadastrado!' };
   }
 
   await Cliente.create({ nomeCliente, email, senha, saldo });
