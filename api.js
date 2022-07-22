@@ -1,6 +1,9 @@
 const express = require('express');
 require('express-async-errors');
 const cors = require('cors');
+const swaggerConfig = require('./src/docs/swagger.config');
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 const ativos = require('./src/routers/ativos.router');
 const cliente = require('./src/routers/cliente.router');
 const investimentos = require('./src/routers/investimentos.router');
@@ -11,6 +14,9 @@ const errorHandler = require('./src/middlewares/errorHandler');
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+const swaggerDoc = swaggerJSDoc(swaggerConfig);
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 app.use('/login', login);
 app.use('/conta', cliente);

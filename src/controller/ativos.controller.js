@@ -3,7 +3,7 @@ const ativosService = require('../service/ativos.service');
 const getAction = async (req, res, _next) => {
   const { codAtivo } =  req.params;
 
-  const acao = await ativosService.getAllActions(codAtivo);
+  const acao = await ativosService.getAction(codAtivo);
 
   return res.status(201).json(acao);
 }
