@@ -2,11 +2,13 @@ const assert = require('assert');
 
 const ativosController = require('../controller/ativos.controller');
 const ativosService = require('../service/ativos.service');
+const mockGetAll = jest.spyOn(ativosService, 'getAction');
+const mockGetAllActionsByClient = jest.spyOn(ativosService, 'getAllActionsByClient');
+const mockGetAllActions = jest.spyOn(ativosService, 'getAllActions');
 
-jest.mock('../service/ativos.service');
-jest.mock('../service/cliente.service');
 
 describe('Testando o arquivo ativos controller', () => {
+  beforeEach(() => jest.useFakeTimers());
   it('GET /:codAtivo', () => {
     const reqParams = {
       'codAtivo': 1,
@@ -15,8 +17,8 @@ describe('Testando o arquivo ativos controller', () => {
     ativosController.getAction(
       { params: reqParams },
       { status: () => ({ json: () => {}})})
-    expect(ativosService.getAction).toHaveBeenCalled();
-    expect(ativosService.getAction).toHaveBeenCalledWith(reqParams.codAtivo);
+    expect(mockGetAll).toHaveBeenCalled();
+    expect(mockGetAll).toHaveBeenCalledWith(reqParams.codAtivo);
   });
 
   it('GET conta/ativos/:codCliente', () => {
@@ -31,11 +33,11 @@ describe('Testando o arquivo ativos controller', () => {
     ativosController.getAllActionsByClient(
       { params: reqParams, query: reqQuery },
       { status: () => ({ json: () => {}})})
-    expect(ativosService.getAllActionsByClient).toHaveBeenCalled();
-    expect(ativosService.getAllActionsByClient).toHaveBeenCalledWith(reqParams.codCliente, reqQuery.page);
+    expect(mockGetAllActionsByClient).toHaveBeenCalled();
+    expect(mockGetAllActionsByClient).toHaveBeenCalledWith(reqParams.codCliente, reqQuery.page);
   });
 
-  it.only('GET qntInvestida/', () => {
+  it('GET qntInvestida/', () => {
     const reqQuery = {
       page: 1,
     };
@@ -43,6 +45,6 @@ describe('Testando o arquivo ativos controller', () => {
     ativosController.getAllActions(
       { query: reqQuery },
       { status: () => ({ json: () => {}})})
-    expect(ativosService.getAllActions).toHaveBeenCalled();
+    expect(mockGetAllActions).toHaveBeenCalled();
   });
 });

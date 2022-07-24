@@ -28,7 +28,7 @@ describe('Testando o arquivo investimentos controller', () => {
     }
 
     await investimentosController.getSellShares(
-      { params: reqParams, query: reqQuery },
+      { body: reqBody },
       { status: () => ({ json: () => {}})})
     expect(investomentoService.getSellShares).toHaveBeenCalled();
     expect(investomentoService.getSellShares).toHaveBeenCalledWith(reqBody.codCliente, reqBody.codAtivo, reqBody.qtdeAtivo);
