@@ -2,9 +2,12 @@ const assert = require('assert');
 
 const ativosController = require('../controller/ativos.controller');
 const ativosService = require('../service/ativos.service');
+
 const mockGetAll = jest.spyOn(ativosService, 'getAction');
 const mockGetAllActionsByClient = jest.spyOn(ativosService, 'getAllActionsByClient');
 const mockGetAllActions = jest.spyOn(ativosService, 'getAllActions');
+
+afterAll(() => jest.clearAllMocks());
 
 
 describe('Testando o arquivo ativos controller', () => {

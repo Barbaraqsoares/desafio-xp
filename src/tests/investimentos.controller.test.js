@@ -1,4 +1,5 @@
 const assert = require('assert');
+require('mysql2/node_modules/iconv-lite').encodingExists('cesu8');
 
 const investimentosController = require('../controller/investimentos.controller');
 const investomentoService = require('../service/investimentos.service');
