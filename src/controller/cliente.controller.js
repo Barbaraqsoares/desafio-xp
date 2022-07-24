@@ -20,7 +20,7 @@ const createClient = async (req, res, _next) => {
   
   const user = await clienteService.createClient(nomeCliente, email, senha, saldo);
   
-  if (user.message) {
+  if (user && user.message) {
     throw { status: user.status, message: user.message };
   }
   
@@ -34,7 +34,7 @@ const getBalanceByClienteId = async (req, res, _next) => {
 
   const cliente = await clienteService.getBalanceByClienteId(id);
 
-  if (cliente.message) {
+  if (cliente && cliente.message) {
     throw { status: cliente.status, message: cliente.message };
   }
   return res.status(201).json(cliente);

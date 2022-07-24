@@ -17,7 +17,7 @@ const getAllActionsByClient = async (req, res, _next) => {
   return res.status(201).json(actionsByClient);
 }
 
-const getAllActions = async (req, res, next) => {
+const getAllActions = async (req, res, _next) => {
   const acoes = await ativosService.getAllActions(req.query.page);
 
   if(!acoes) {
