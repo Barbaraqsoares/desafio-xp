@@ -95,7 +95,7 @@ routers.get('/ativos/:codCliente', validateToken, ativosController.getAllActions
  *              type: object
  *              $ref: '#/components/schemas/Cliente'   
 */
-routers.post('/', validateClient, clienteController.createClient);
+routers.post('/create', validateClient, clienteController.createClient);
 
 /** 
  *@swagger

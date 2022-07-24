@@ -6,7 +6,7 @@ const loginClient = async (req, res, _next) => {
 
   const user = await clienteService.loginClient(email);
   
-  if (user.message) {
+  if (user && user.message) {
     throw { status: 400, message: user.message };
   }
   

@@ -41,7 +41,9 @@ const routers = express.Router();
  *      content:
  *        application/json:
  *          schema:
- *            type: object
+ *            type: objeto
+ *              token:
+ *                type: string
  *    responses:
  *      200:
  *        content:
